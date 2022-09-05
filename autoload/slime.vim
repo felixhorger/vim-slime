@@ -58,7 +58,7 @@ function! s:KittyConfig() abort
   end
   let b:slime_config["window_id"] = str2nr(system("kitty @ select-window --self"))
   if v:shell_error
-    let b:slime_config["window_id"] = input("kitty window_id: ","1") 
+    let b:slime_config["window_id"] = input("kitty window_id: ","1")
   end
   let b:slime_config["listen_on"] = input("kitty listen on: ", b:slime_config["listen_on"])
 endfunction
@@ -306,7 +306,7 @@ function! s:_EscapeText(text)
   end
 endfunction
 
-function! s:SlimeGetConfig()
+function! s:SlimeGetConfig() abort
   " b:slime_config already configured...
   if exists("b:slime_config")
     return
@@ -320,11 +320,17 @@ function! s:SlimeGetConfig()
     return
   end
   " prompt user
-  call s:SlimeDispatch('Config')
+  "call s:SlimeDispatch('Config')
+  throw 0
 endfunction
 
 function! slime#send_op(type, ...) abort
-  call s:SlimeGetConfig()
+  try
+    call s:SlimeGetConfig()
+  catch
+    echoerr "Please run 'SlimeConfig' first to configure slime."
+    return
+  endtry
 
   let sel_save = &selection
   let &selection = "inclusive"
