@@ -349,7 +349,7 @@ function! slime#send_op(type, ...) abort
   try
     call s:SlimeGetConfig()
   catch
-    echoerr "Please run 'SlimeConfig' first to configure slime."
+    echoerr "Please run 'SlimeConfig' first."
     return
   endtry
 
