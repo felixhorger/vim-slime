@@ -330,7 +330,7 @@ endfunction
 function! s:SlimeGetConfig() abort
   " b:slime_config already configured...
   if exists("b:slime_config")
-    return
+    return 0
   end
   " assume defaults, if they exist
   if exists("g:slime_default_config")
@@ -338,20 +338,19 @@ function! s:SlimeGetConfig() abort
   end
   " skip confirmation, if configured
   if exists("g:slime_dont_ask_default") && g:slime_dont_ask_default
-    return
+    return 0
   end
   " prompt user
   "call s:SlimeDispatch('Config')
-  throw 0
+  return 1
 endfunction
 
 function! slime#send_op(type, ...) abort
-  try
-    call s:SlimeGetConfig()
-  catch
+  let l:result = s:SlimeGetConfig()
+  if l:result > 0
     echoerr "Please run 'SlimeConfig' first."
     return
-  endtry
+  endif
 
   let sel_save = &selection
   let &selection = "inclusive"
@@ -378,7 +377,11 @@ function! slime#send_op(type, ...) abort
 endfunction
 
 function! slime#send_range(startline, endline) abort
-  call s:SlimeGetConfig()
+  let l:result = s:SlimeGetConfig()
+  if l:result > 0
+    echoerr "Please run 'SlimeConfig' first."
+    return
+  endif
 
   let rv = getreg('"')
   let rt = getregtype('"')
@@ -388,7 +391,11 @@ function! slime#send_range(startline, endline) abort
 endfunction
 
 function! slime#send_lines(count) abort
-  call s:SlimeGetConfig()
+  let l:result = s:SlimeGetConfig()
+  if l:result > 0
+    echoerr "Please run 'SlimeConfig' first."
+    return
+  endif
 
   let rv = getreg('"')
   let rt = getregtype('"')
@@ -438,7 +445,11 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! slime#send(text)
-  call s:SlimeGetConfig()
+  let l:result = s:SlimeGetConfig()
+  if l:result > 0
+    echoerr "Please run 'SlimeConfig' first."
+    return
+  endif
 
   " this used to return a string, but some receivers (coffee-script)
   " will flush the rest of the buffer given a special sequence (ctrl-v)
