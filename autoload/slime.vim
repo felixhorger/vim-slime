@@ -348,7 +348,7 @@ endfunction
 function! slime#send_op(type, ...) abort
   let l:result = s:SlimeGetConfig()
   if l:result > 0
-    echoerr "Please run 'SlimeConfig' first."
+    call s:SlimeRestoreCurPos()
     return
   endif
 
@@ -379,7 +379,7 @@ endfunction
 function! slime#send_range(startline, endline) abort
   let l:result = s:SlimeGetConfig()
   if l:result > 0
-    echoerr "Please run 'SlimeConfig' first."
+    call s:SlimeRestoreCurPos()
     return
   endif
 
@@ -393,7 +393,7 @@ endfunction
 function! slime#send_lines(count) abort
   let l:result = s:SlimeGetConfig()
   if l:result > 0
-    echoerr "Please run 'SlimeConfig' first."
+    call s:SlimeRestoreCurPos()
     return
   endif
 
